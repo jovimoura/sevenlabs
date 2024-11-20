@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId String @unique
+
+  audio Audio[]
+
+  typePlan               String?
+  status                 String?
+  stripeCustomerId       String?   @unique @map(name: "stripe_customer_id")
+  stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
+  stripePriceId          String?   @map(name: "stripe_price_id")
+  stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+}
+
+model Audio {
+  id             String   @id @map("_id") @db.ObjectId
+  clerkId        String
+  user           User     @relation(fields: [clerkId], references: [clerkId], onDelete: Cascade)
+  bucketId       String
+  permissions    String[]
+  name           String
+  signature      String
+  mimeType       String
+  sizeOriginal   Int
+  chunksTotal    Int
+  chunksUploaded Int
+
+  createAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
