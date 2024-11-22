@@ -27,16 +27,19 @@ const items = [
     title: "Text to Speech",
     icon: Mic,
     url: "/app/text-to-speech",
+    beta: false
   },
   {
     title: "Voices",
     icon: MicVocal,
     url: "/app/voices",
+    beta: true
   },
   {
     title: "Sound Effects",
     icon: AudioLines,
     url: "/app/sound-effects",
+    beta: true
   },
 ];
 
@@ -59,9 +62,10 @@ export async function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <a aria-disabled={item.beta} href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
+                      {item.beta && <span className="inline-flex items-center rounded-full border border-transparent px-2 py-0.5 font-medium transition-colors whitespace-nowrap focus-ring bg-gray-200 text-dark text-xs">Beta</span>}
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
