@@ -1,4 +1,4 @@
-import { AudioLines, ChevronUp, Mic, MicVocal, User2 } from "lucide-react";
+import { AudioLines, Mic, MicVocal } from "lucide-react";
 
 import {
   Sidebar,
@@ -12,15 +12,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./dropdown-menu";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { UserAccount } from "../user-account";
 import { getUserSubscriptionPlan } from "@/lib/stripe";
+import { FreeCounter } from "../free-counter";
+import { getApiLimitCount, getApiMaxLimitCount } from "@/lib/api-limit";
+import { checkSubscriptionPremium } from "@/lib/subscription";
 
 const items = [
   {
@@ -47,6 +44,10 @@ export async function AppSidebar() {
   const { userId: clerkId } = await auth();
   const user = await currentUser();
   const subscriptionPlan = await getUserSubscriptionPlan(clerkId!);
+
+  const apiLimitCount = await getApiLimitCount(clerkId!);
+  const isPremium = await checkSubscriptionPremium(clerkId!);
+  const maxLimitCount = await getApiMaxLimitCount(clerkId!)
   return (
     <Sidebar>
       <SidebarHeader>
@@ -77,21 +78,17 @@ export async function AppSidebar() {
 
       <SidebarFooter>
         <SidebarMenu>
+        <SidebarMenuItem>
+          <FreeCounter maxLimitCount={maxLimitCount} apiLimitCount={apiLimitCount} isPremium={isPremium} />
+        </SidebarMenuItem>
           <SidebarMenuItem>
             {user && (
               <UserAccount
                 user={{
-                  name: user.firstName as string,
+                  name: !user?.firstName ? "Sua Conta" : `${user.firstName} ${user.lastName}`,
                   avatar: user?.imageUrl ?? "",
                   email: user?.emailAddresses[0].emailAddress || "",
                 }}
-                // name={
-                //   !user?.firstName
-                //     ? "Sua Conta"
-                //     : `${user.firstName} ${user.lastName}`
-                // }
-                // email={user?.emailAddresses[0].emailAddress || ""}
-                // imageUrl={user?.imageUrl ?? ""}
                 // subscriptionPlan={subscriptionPlan}
               />
             )}

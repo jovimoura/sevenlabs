@@ -2,7 +2,7 @@ import internal from "stream";
 import { twMerge } from "tailwind-merge";
 import { clsx, type ClassValue } from "clsx";
 
-const prodUrl = process.env.URL as string || `https://yoresume.work`
+const prodUrl = process.env.URL as string || `https://sevenlabz.vercel.app`
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -19,5 +19,5 @@ export async function streamToBuffer(
 }
 
 export function absoluteUrl(path: string) {
-  return process.env.NODE_ENV === 'production' ? `${prodUrl}${path}` : `https://yoresume.work${path}`
+  return process.env.NODE_ENV === 'production' ? `${prodUrl}${path}` : `https://sevenlabz.vercel.app${path}`
 }

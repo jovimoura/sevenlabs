@@ -1,9 +1,8 @@
 export const PLANS = [
   {
-    name: 'YoResume Free',
+    name: 'Seven Free',
     slug: 'free',
-    quota: 1,
-    pagesPerPdf: 10,
+    credits: 100,
     price: {
       amount: 0,
       priceIds: {
@@ -13,15 +12,14 @@ export const PLANS = [
     },
   },
   {
-    name: 'YoResume Pro',
+    name: 'Seven Pro',
     slug: 'pro',
-    quota: 20,
-    pagesPerPdf: 200,
+    credits: 10000,
     price: {
-      amount: 3,
+      amount: 2,
       priceIds: {
-        test: 'price_1Q2frHK2gZq9oilY5tyYjRnn',
-        production: 'price_1Q3IakK2gZq9oilYsWuofbEQ',
+        test: 'price_1QNmMQGDqBpliLCpg7eGOxHm',
+        production: 'price_1QNmMQGDqBpliLCpg7eGOxHm',
       },
     },
   },

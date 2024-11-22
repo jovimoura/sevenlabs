@@ -1,10 +1,13 @@
-import { Zap } from "lucide-react";
+'use client'
+
+import { Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { useProModal } from "@/hooks/use-pro-modal";
+import { useToast } from "@/hooks/use-toast";
+import { createStripeSession } from "@/app/app/actions";
 
 interface Props {
   isPremium: boolean;
@@ -13,8 +16,26 @@ interface Props {
 }
 
 export const FreeCounter = ({ isPremium = false, apiLimitCount = 0, maxLimitCount }: Props) => {
+  const { toast } = useToast();
   const [mounted, setMounted] = useState(false);
-  const proModal = useProModal();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreateStripeSession = async () => {
+    setIsLoading(true);
+    const { url, error } = await createStripeSession();
+
+    if (error) {
+      toast({
+        title: "Error in method Payment",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
+
+    setIsLoading(false);
+    window.location.href = url ?? "/dashboard/billing";
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -28,13 +49,13 @@ export const FreeCounter = ({ isPremium = false, apiLimitCount = 0, maxLimitCoun
     return null;
   }
 
-  const label = `${apiLimitCount} / ${maxLimitCount} Gerações ${maxLimitCount > 5 ? '': 'Gratuitas'}`
+  const label = `${apiLimitCount} / ${maxLimitCount} credits remaining ${maxLimitCount > 5 ? '': 'free'}`
 
   return (
-    <div className='px-3'>
-      <Card className='bg-white/10 border-0'>
-        <CardContent className='py-6'>
-          <div className='text-center text-sm text-white mb-4 space-y-2'>
+    <div className=''>
+      <Card className='bg-white/10 border-0 shadow-none p-0'>
+        <CardContent className='px-4'>
+          <div className='text-center text-sm mb-4 space-y-2'>
             <p>
               {label}
             </p>
@@ -44,12 +65,15 @@ export const FreeCounter = ({ isPremium = false, apiLimitCount = 0, maxLimitCoun
             />
           </div>
           <Button
-            onClick={proModal.onOpen}
+            onClick={e => {
+              e.preventDefault()
+              handleCreateStripeSession()
+            }}
             // variant='premium'
             className='w-full'
           >
-            Upgrade
-            <Zap className='w-4 h-4 ml-2 fill-white' />
+            <Sparkles />
+            Upgrade to Pro
           </Button>
         </CardContent>
       </Card>

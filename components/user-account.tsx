@@ -2,7 +2,6 @@
 
 import {
   BadgeCheck,
-  Bell,
   ChevronsUpDown,
   CreditCard,
   LogOut,
@@ -29,6 +28,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { createStripeSession } from "@/app/app/actions"
+import { useToast } from "@/hooks/use-toast"
+import { useState } from "react"
 
 export function UserAccount({
   user,
@@ -39,7 +41,27 @@ export function UserAccount({
     avatar: string
   }
 }) {
+  const { toast } = useToast();
   const { isMobile } = useSidebar()
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleCreateStripeSession = async () => {
+    setIsLoading(true);
+    const { url, error } = await createStripeSession();
+
+    if (error) {
+      toast({
+        title: "Error in method Payment",
+        description: "Please try again later.",
+        variant: "destructive",
+      });
+      setIsLoading(false);
+    }
+
+    setIsLoading(false);
+    window.location.href = url ?? "/dashboard/billing";
+  };
 
   return (
     <SidebarMenu>
@@ -81,7 +103,10 @@ export function UserAccount({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={e => {
+                e.preventDefault()
+                handleCreateStripeSession()
+              }}>
                 <Sparkles />
                 Upgrade to Pro
               </DropdownMenuItem>
@@ -95,10 +120,6 @@ export function UserAccount({
               <DropdownMenuItem>
                 <CreditCard />
                 Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
