@@ -5,11 +5,12 @@ import { Providers } from "@/components/providers";
 import { Inter } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Free Text to Speech & AI Voice Generator | SevenLabz",
   description: "Create the most realistic speech with our AI audio in 1000s of voices and 32 languages. Pioneering research in Text to Speech and AI Voice Generation",
+  icons: '/logo.png'
 };
 
 export default function RootLayout({
@@ -21,7 +22,7 @@ export default function RootLayout({
     <ClerkProvider>
     <html lang="en" suppressHydrationWarning>
       <body
-        className={inter.className}
+        className={font.className}
       >
         <Toaster />
         <Providers
