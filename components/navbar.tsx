@@ -19,7 +19,7 @@ export const Navbar = () => {
   }
   return (
     <div className="flex items-center p-4 w-full border-b">
-      <span className="font-waldenburg-ht text-lg text-dark font-semibold">{handleCreateLabelWithUrl(pathname)}</span>
+      <span className="text-lg font-bold">{handleCreateLabelWithUrl(pathname)}</span>
     </div>
   )
 }

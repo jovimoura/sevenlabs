@@ -4,7 +4,6 @@ import TextToSpeech from "@/components/text-to-speech";
 
 export default async function Home() {
   const voicesRes = await elevenlabs.voices.getAll();
-
   const history = await elevenlabs.history.getAll();
 
   const voices = voicesRes.voices;
@@ -14,7 +13,7 @@ export default async function Home() {
   }
 
   return (
-    <main className="flex flex-col items-center min-h-screen p-4 md:p-8">
+    <main className="flex flex-col items-center min-h-screen overflow-y-hidden">
       <TextToSpeech history={history} voices={voices} />
     </main>
   );

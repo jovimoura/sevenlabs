@@ -18,6 +18,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./dropdown-menu";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { UserAccount } from "../user-account";
+import { getUserSubscriptionPlan } from "@/lib/stripe";
 
 const items = [
   {
@@ -37,13 +40,16 @@ const items = [
   },
 ];
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const { userId: clerkId } = await auth();
+  const user = await currentUser();
+  const subscriptionPlan = await getUserSubscriptionPlan(clerkId!);
   return (
     <Sidebar>
       <SidebarHeader>
-        <SidebarContent>
-      <span>7SevenLabz</span>
-      </SidebarContent>
+        <div className="p-2">
+          <span className="text-lg font-bold text-black">7SevenLabz</span>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
@@ -68,28 +74,23 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> Username
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-[--radix-popper-anchor-width]"
-              >
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {user && (
+              <UserAccount
+                user={{
+                  name: user.firstName as string,
+                  avatar: user?.imageUrl ?? "",
+                  email: user?.emailAddresses[0].emailAddress || "",
+                }}
+                // name={
+                //   !user?.firstName
+                //     ? "Sua Conta"
+                //     : `${user.firstName} ${user.lastName}`
+                // }
+                // email={user?.emailAddresses[0].emailAddress || ""}
+                // imageUrl={user?.imageUrl ?? ""}
+                // subscriptionPlan={subscriptionPlan}
+              />
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

@@ -10,8 +10,15 @@ import { useTTSStore } from "@/store/use-tts-store";
 import { useState } from "react";
 import { DownloadIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import axios from "axios";
+import { Label } from "./ui/label";
 
-export default function TextToSpeech({ voices, history }: { voices: Voice[], history: any }) {
+export default function TextToSpeech({
+  voices,
+  history,
+}: {
+  voices: Voice[];
+  history: any;
+}) {
   const { text, voice, setText } = useTTSStore();
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -33,7 +40,7 @@ export default function TextToSpeech({ voices, history }: { voices: Voice[], his
         }
       );
 
-      console.log('RES', res.data)
+      console.log("RES", res.data);
 
       const audioBlob = res.data;
       const url = URL.createObjectURL(audioBlob);
@@ -54,36 +61,34 @@ export default function TextToSpeech({ voices, history }: { voices: Voice[], his
   };
 
   return (
-    <div className="max-w-7xl mx-auto w-full border-2 border-indigo-500 rounded-xl p-4 py-8 md:p-12">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <div className="max-w-7xl mx-auto w-full">
+      <form onSubmit={handleSubmit} className="flex gap-4">
         <Textarea
           name="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Enter your text here..."
-          className="min-h-32"
+          placeholder="Start typing here or paste any text you want to turn into lifelike speech..."
+          className="border-none outline-none focus-visible:ring-0 focus-visible:ring-transparent shadow-none min-h-[calc(100vh-70px)] p-4 md:p-8 resize-none"
         />
-
-        <VoiceList voices={voices} />
-
-        <Button
-          type="submit"
-          className="bg-indigo-500 hover:bg-indigo-500/90"
-          // onClick={handleDownload}
-          disabled={isLoading || !text || !voice}
-        >
-          {isLoading ? (
-            <div className="flex items-center space-x-3">
-              <span>Generating</span>
-              <Loader2Icon className="animate-spin size-5" />
-            </div>
-          ) : (
-            <div className="flex items-center space-x-3">
-              <span>Generate</span>
-              <SparklesIcon className="size-5" />
-            </div>
-          )}
-        </Button>
+        <div className="w-1/2 border-l p-4 md:p-8 flex flex-col gap-4">
+          <div className="space-y-2">
+            <Label>Voices</Label>
+            <VoiceList voices={voices} />
+          </div>
+          <Button type="submit" disabled={isLoading || !text || !voice}>
+            {isLoading ? (
+              <div className="flex items-center space-x-3">
+                <span>Generating speech</span>
+                <Loader2Icon className="animate-spin size-5" />
+              </div>
+            ) : (
+              <div className="flex items-center space-x-3">
+                <span>Generate speech</span>
+                <SparklesIcon className="size-5" />
+              </div>
+            )}
+          </Button>
+        </div>
       </form>
 
       {audioUrl && (
@@ -95,7 +100,6 @@ export default function TextToSpeech({ voices, history }: { voices: Voice[], his
           <Button
             onClick={handleDownload}
             size="icon"
-            className="bg-indigo-500 hover:bg-indigo-500/90"
           >
             <DownloadIcon className="size-5" />
           </Button>
