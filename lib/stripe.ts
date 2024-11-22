@@ -52,7 +52,7 @@ export async function getUserSubscriptionPlan(clerkId: string) {
 
   return {
     ...plan,
-    name: !isSubscribed ? "YoResume Free" : "YoResume Pro",
+    name: !isSubscribed ? "SevenLabz Free" : "SevenLabz Pro",
     slug: !isSubscribed ? "free" : "pro",
     stripeSubscriptionId: dbUser.stripeSubscriptionId,
     stripeCurrentPeriodEnd: dbUser.stripeCurrentPeriodEnd,
