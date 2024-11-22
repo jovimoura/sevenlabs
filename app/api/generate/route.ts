@@ -42,7 +42,7 @@ export async function POST(req: Request) {
 
   try {
     const result: ResultStorage = await storage.createFile(
-      process.env.APPWRITE_PROJECT as string,
+      process.env.APPWRITE_STORAGE as string,
       uuidv4(),
       audioFile
       
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 
     const newAudio = await prisma.audio.create({
       data: {
-        id: result.$id,
+        audioId: result.$id,
         bucketId: result.bucketId,
         permissions: result.$permissions,
         name: result.name,

@@ -67,7 +67,6 @@ export default function VoiceList({ voices }: { voices: Voice[] }) {
             type="button"
             size="icon"
             onClick={handlePlayPause}
-            className="bg-indigo-500 hover:bg-indigo-500/90"
           >
             {isPlaying ? (
               <PauseIcon className="size-5" />

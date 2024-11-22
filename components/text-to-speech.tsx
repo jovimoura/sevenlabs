@@ -88,23 +88,25 @@ export default function TextToSpeech({
               </div>
             )}
           </Button>
+
+          {audioUrl && (
+            <div className="flex items-center space-x-3 mt-8">
+              <audio controls className="w-full">
+                <source src={audioUrl} type="audio/mpeg" />
+              </audio>
+
+              <Button
+                onClick={handleDownload}
+                size="icon"
+              >
+                <DownloadIcon className="size-5" />
+              </Button>
+            </div>
+          )}
         </div>
       </form>
 
-      {audioUrl && (
-        <div className="flex items-center space-x-3 mt-8">
-          <audio controls className="w-full">
-            <source src={audioUrl} type="audio/mpeg" />
-          </audio>
-
-          <Button
-            onClick={handleDownload}
-            size="icon"
-          >
-            <DownloadIcon className="size-5" />
-          </Button>
-        </div>
-      )}
+      
     </div>
   );
 }

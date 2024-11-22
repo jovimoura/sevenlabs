@@ -36,7 +36,8 @@ model UserApiLimit {
 }
 
 model Audio {
-  id             String   @id @map("_id") @db.ObjectId
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  audioId String @unique
   clerkId        String
   user           User     @relation(fields: [clerkId], references: [clerkId], onDelete: Cascade)
   bucketId       String
