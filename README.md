@@ -1,7 +1,7 @@
 <div align="center">
   <br />
     <a href="https://youtu.be/lie0cr3wESQ" target="_blank">
-      <img src="./public/dashboard.png" alt="Project Banner">
+      <img src="./public/sevenlabz.png" alt="Project Banner">
     </a>
   <br />
 
@@ -107,7 +107,7 @@ NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=/app
 NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=/app
-DATABASE_URL=mongodb+srv:
+DATABASE_URL=
 APPWRITE_PROJECT=
 APPWRITE_ENDPOINT="https://cloud.appwrite.io/v1"
 APPWRITE_STORAGE=
