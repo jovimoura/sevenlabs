@@ -123,12 +123,11 @@ export function UserAccount({
             )}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              {/* <DropdownMenuItem>
                 <BadgeCheck />
                 Account
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuItem className="cursor-pointer" onClick={(e) => {
-                // e.preventDefault()
                 router.push('/app/billing')
               }}>
                 <CreditCard />
