@@ -84,6 +84,7 @@ export async function AppSidebar() {
           <SidebarMenuItem>
             {user && (
               <UserAccount
+                isPremium={isPremium}
                 user={{
                   name: !user?.firstName ? "Sua Conta" : `${user.firstName} ${user.lastName}`,
                   avatar: user?.imageUrl ?? "",

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   BadgeCheck,
@@ -6,13 +6,9 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
-} from "lucide-react"
+} from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,30 +17,35 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { createStripeSession } from "@/app/app/actions"
-import { useToast } from "@/hooks/use-toast"
-import { useState } from "react"
+} from "@/components/ui/sidebar";
+import { createStripeSession } from "@/app/app/actions";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function UserAccount({
   user,
+  isPremium,
 }: {
+  isPremium: boolean;
   user: {
-    name: string
-    email: string
-    avatar: string
-  }
+    name: string;
+    email: string;
+    avatar: string;
+  };
 }) {
   const { toast } = useToast();
-  const { isMobile } = useSidebar()
+  const { isMobile } = useSidebar();
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter()
 
   const handleCreateStripeSession = async () => {
     setIsLoading(true);
@@ -67,7 +68,10 @@ export function UserAccount({
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger className="border-none outline-none focus-visible:ring-0 focus-visible:ring-transparent" asChild>
+          <DropdownMenuTrigger
+            className="border-none outline-none focus-visible:ring-0 focus-visible:ring-transparent"
+            asChild
+          >
             <SidebarMenuButton
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -101,23 +105,32 @@ export function UserAccount({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem onClick={e => {
-                e.preventDefault()
-                handleCreateStripeSession()
-              }}>
-                <Sparkles />
-                Upgrade to Pro
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
+            {!isPremium && (
+              <>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleCreateStripeSession();
+                    }}
+                  >
+                    <Sparkles />
+                    Upgrade to Pro
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer" onClick={(e) => {
+                // e.preventDefault()
+                router.push('/app/billing')
+              }}>
                 <CreditCard />
                 Billing
               </DropdownMenuItem>
@@ -131,5 +144,5 @@ export function UserAccount({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }
