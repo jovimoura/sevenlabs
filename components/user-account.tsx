@@ -4,6 +4,7 @@ import {
   BadgeCheck,
   ChevronsUpDown,
   CreditCard,
+  Gem,
   LogOut,
   Sparkles,
 } from "lucide-react";
@@ -45,7 +46,7 @@ export function UserAccount({
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleCreateStripeSession = async () => {
     setIsLoading(true);
@@ -110,6 +111,15 @@ export function UserAccount({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem
+                    className="cursor-pointer"
+                    onClick={(e) => {
+                      router.push("/app/pricing");
+                    }}
+                  >
+                    <Gem />
+                    Plans
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
                     onClick={(e) => {
                       e.preventDefault();
                       handleCreateStripeSession();
@@ -123,13 +133,12 @@ export function UserAccount({
             )}
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              {/* <DropdownMenuItem>
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem> */}
-              <DropdownMenuItem className="cursor-pointer" onClick={(e) => {
-                router.push('/app/billing')
-              }}>
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={(e) => {
+                  router.push("/app/billing");
+                }}
+              >
                 <CreditCard />
                 Billing
               </DropdownMenuItem>

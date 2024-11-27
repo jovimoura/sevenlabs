@@ -86,7 +86,7 @@ export async function AppSidebar() {
               <UserAccount
                 isPremium={isPremium}
                 user={{
-                  name: !user?.firstName ? "Sua Conta" : `${user.firstName} ${user.lastName}`,
+                  name: !user?.firstName ? "Sua Conta" : `${user.firstName} ${user.lastName ? user.lastName : ""}`,
                   avatar: user?.imageUrl ?? "",
                   email: user?.emailAddresses[0].emailAddress || "",
                 }}

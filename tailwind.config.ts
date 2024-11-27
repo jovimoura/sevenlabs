@@ -122,7 +122,7 @@ const config: Config = {
   					'offset-distance': '100%'
   				}
   			},
-  			'marquee': {
+  			marquee: {
   				from: {
   					transform: 'translateX(0)'
   				},
@@ -148,7 +148,7 @@ const config: Config = {
   			'rotate-new': 'rotate-new 20s linear infinite',
   			shimmer: 'shimmer 2s linear infinite',
   			'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
-  			'marquee': 'marquee var(--duration) linear infinite',
+  			marquee: 'marquee var(--duration) linear infinite',
   			grid: 'grid 15s linear infinite'
   		}
   	}
