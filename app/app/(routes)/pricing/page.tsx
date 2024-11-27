@@ -16,7 +16,7 @@ import { ArrowRight, Check, HelpCircle, Minus } from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { AnimatedContainer } from "@/components/ui/animated-container";
-import { pricingItems } from "@/app/page";
+import { pricingItems } from "@/consts";
 
 const Page = () => {
   const { user } = useUser();
