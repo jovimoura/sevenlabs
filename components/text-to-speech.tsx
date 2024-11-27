@@ -11,6 +11,7 @@ import { useState } from "react";
 import { DownloadIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import axios from "axios";
 import { Label } from "./ui/label";
+import { useRouter } from "next/navigation";
 
 export default function TextToSpeech({
   voices,
@@ -19,6 +20,7 @@ export default function TextToSpeech({
   voices: Voice[];
   history: any;
 }) {
+  const router = useRouter()
   const { text, voice, setText } = useTTSStore();
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -40,7 +42,7 @@ export default function TextToSpeech({
         }
       );
 
-      console.log("RES", res.data);
+      router.refresh()
 
       const audioBlob = res.data;
       const url = URL.createObjectURL(audioBlob);
@@ -64,6 +66,7 @@ export default function TextToSpeech({
     <div className="max-w-7xl mx-auto w-full">
       <form onSubmit={handleSubmit} className="flex gap-4">
         <Textarea
+          maxLength={5000}
           name="text"
           value={text}
           onChange={(e) => setText(e.target.value)}

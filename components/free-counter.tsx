@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { createStripeSession } from "@/app/app/actions";
+import { CreditsRemaining } from "./credits-remaing";
 
 interface Props {
   isPremium: boolean;
@@ -45,26 +46,14 @@ export const FreeCounter = ({ isPremium = false, apiLimitCount = 0, maxLimitCoun
     return null;
   }
 
-  if (isPremium) {
-    return null;
-  }
-
-  const label = `${apiLimitCount} / ${maxLimitCount} credits remaining ${maxLimitCount > 5 ? '': 'free'}`
-
   return (
     <div className=''>
       <Card className='bg-white/10 border-0 shadow-none p-0'>
         <CardContent className='px-4'>
           <div className='text-center text-sm mb-4 space-y-2'>
-            <p>
-              {label}
-            </p>
-            <Progress
-              className='h-3'
-              value={(apiLimitCount / maxLimitCount) * 100}
-            />
+            <CreditsRemaining credits={maxLimitCount - apiLimitCount} maxCredits={maxLimitCount} />
           </div>
-          <Button
+          {!isPremium && <Button
             onClick={e => {
               e.preventDefault()
               handleCreateStripeSession()
@@ -74,7 +63,7 @@ export const FreeCounter = ({ isPremium = false, apiLimitCount = 0, maxLimitCoun
           >
             <Sparkles />
             Upgrade to Pro
-          </Button>
+          </Button>}
         </CardContent>
       </Card>
     </div>

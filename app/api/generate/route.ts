@@ -4,6 +4,9 @@ import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from 'uuid';
 import { Client, Storage } from "appwrite";
 import { prisma } from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server";
+import { checkApiLimit, incrementApiLimit } from "@/lib/api-limit";
+import { checkSubscriptionPremium } from "@/lib/subscription";
 
 type ResultStorage = {
   $id: string;
@@ -26,7 +29,10 @@ const client = new Client()
 const storage = new Storage(client);
 
 export async function POST(req: Request) {
+  const { userId } = await auth()
   const { text, voice } = await req.json();
+
+  if (!userId) return new NextResponse('Unauthorized', { status: 500 });
 
   const audio = await elevenlabs.generate({
     voice,
@@ -48,10 +54,14 @@ export async function POST(req: Request) {
       
     );
 
-    // salvar no banco aqui o result
+    const trials = await checkApiLimit(userId);
+    const isPremium = await checkSubscriptionPremium(userId);
 
+    if (!trials && !isPremium) {
+      return new NextResponse("Free trial has expired. Please upgrade to pro.", { status: 403 });
+    }
     console.log('RESULT', result)
-    const clerkId = '5667960da25809a8f74e18e4b15ab816'
+    const clerkId = userId
 
     const newAudio = await prisma.audio.create({
       data: {
@@ -67,6 +77,8 @@ export async function POST(req: Request) {
         clerkId,
       }
     })
+
+    await incrementApiLimit(clerkId, text.length)
 
     return new NextResponse(audioBuffer, {
       headers: {

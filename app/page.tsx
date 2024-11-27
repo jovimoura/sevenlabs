@@ -16,12 +16,9 @@ import {
   ArrowRight,
   Check,
   ChevronRight,
-  FileHeart,
-  FilePenLine,
   HelpCircle,
   Minus,
   StarIcon,
-  UserRoundPlus,
 } from "lucide-react";
 import Link from "next/link";
 import { Footer } from "@/components/ui/footer";

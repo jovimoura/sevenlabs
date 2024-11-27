@@ -1,7 +1,7 @@
 import { MAX_FREE_COUNTS, MAX_PRO_COUNTS } from "@/consts";
 import { prisma } from "./prisma";
 
-export const incrementApiLimit = async (clerkId: string) => {
+export const incrementApiLimit = async (clerkId: string, value: number) => {
   if (!clerkId) {
     return;
   }
@@ -13,11 +13,11 @@ export const incrementApiLimit = async (clerkId: string) => {
   if (userApiLimit) {
     await prisma.userApiLimit.update({
       where: { clerkId },
-      data: { count: userApiLimit.count + 1 },
+      data: { count: userApiLimit.count + value },
     });
   } else {
     await prisma.userApiLimit.create({
-      data: { clerkId, count: 1 },
+      data: { clerkId, count: value },
     });
   }
 };

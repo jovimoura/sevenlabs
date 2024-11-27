@@ -54,8 +54,8 @@ export const checkSubscriptionPremium = async (clerkId: string) => {
 
   const isValid =
     userSubscription.stripePriceId &&
-    userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now() &&
-    userSubscription.typePlan === 'premium'
+    userSubscription.stripeCurrentPeriodEnd?.getTime()! + DAY_IN_MS > Date.now()
+    // userSubscription.typePlan === 'premium'
 
   return !!isValid;
 };
