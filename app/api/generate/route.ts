@@ -74,6 +74,7 @@ export async function POST(req: Request) {
         sizeOriginal: result.sizeOriginal,
         chunksTotal: result.chunksTotal,
         chunksUploaded: result.chunksUploaded,
+        text,
         clerkId,
       }
     })

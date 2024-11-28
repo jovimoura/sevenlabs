@@ -43,6 +43,7 @@ model Audio {
   bucketId       String
   permissions    String[]
   name           String
+  text           String?
   signature      String
   mimeType       String
   sizeOriginal   Int

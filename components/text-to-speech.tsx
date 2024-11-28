@@ -12,15 +12,31 @@ import { DownloadIcon, Loader2Icon, SparklesIcon } from "lucide-react";
 import axios from "axios";
 import { Label } from "./ui/label";
 import { useRouter } from "next/navigation";
+import { handleDownloadAudioFiles } from "@/app/app/actions";
 
 export default function TextToSpeech({
   voices,
   history,
 }: {
   voices: Voice[];
-  history: any;
+  history: {
+    text: string | null;
+    name: string;
+    id: string;
+    audioId: string;
+    clerkId: string;
+    bucketId: string;
+    permissions: string[];
+    signature: string;
+    mimeType: string;
+    sizeOriginal: number;
+    chunksTotal: number;
+    chunksUploaded: number;
+    createAt: Date;
+    updatedAt: Date;
+  }[];
 }) {
-  const router = useRouter()
+  const router = useRouter();
   const { text, voice, setText } = useTTSStore();
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -42,7 +58,7 @@ export default function TextToSpeech({
         }
       );
 
-      router.refresh()
+      router.refresh();
 
       const audioBlob = res.data;
       const url = URL.createObjectURL(audioBlob);
@@ -98,18 +114,38 @@ export default function TextToSpeech({
                 <source src={audioUrl} type="audio/mpeg" />
               </audio>
 
-              <Button
-                onClick={handleDownload}
-                size="icon"
-              >
+              <Button onClick={handleDownload} size="icon">
                 <DownloadIcon className="size-5" />
               </Button>
             </div>
           )}
+
+          <div className="space-y-2 flex-col flex">
+            <Label>History</Label>
+            <div className="space-y-3 flex-col flex">
+              {history.length > 0 ? (
+                history.map((audio, i) => (
+                  <div className="space-x-3 items-center justify-start gap-4">
+                    <span className="truncate text-sm" key={i}>
+                      {audio.text}
+                    </span>
+                    <Button
+                      variant="ghost"
+                      className="rounded-full"
+                      onClick={() => handleDownloadAudioFiles(audio.audioId)}
+                      size="icon"
+                    >
+                      <DownloadIcon className="size-5" />
+                    </Button>
+                  </div>
+                ))
+              ) : (
+                <span className="truncate text-xs">No audios...</span>
+              )}
+            </div>
+          </div>
         </div>
       </form>
-
-      
     </div>
   );
 }

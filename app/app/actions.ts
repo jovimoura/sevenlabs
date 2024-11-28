@@ -1,18 +1,44 @@
-'use server'
+"use server";
 
 import { prisma } from "@/lib/prisma";
 import { absoluteUrl } from "@/lib/utils";
-import { auth, currentUser } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { stripe } from "@/lib/stripe";
 import { PLANS } from "@/config/stripe";
+import { Client, Storage } from "appwrite";
 
 const envPrice =
   process.env.NODE_ENV === "production"
     ? PLANS.find((plan) => plan.slug === "pro")?.price.priceIds.production
     : PLANS.find((plan) => plan.slug === "pro")?.price.priceIds.test;
 
+const client = new Client()
+  .setEndpoint(process.env.APPWRITE_ENDPOINT as string)
+  .setProject(process.env.APPWRITE_PROJECT as string);
+
+export async function handleDownloadAudioFiles(fileId: string) {
+  const storage = new Storage(client);
+
+  const result = storage.getFileDownload(
+    process.env.APPWRITE_STORAGE as string,
+    fileId
+  );
+
+  return result;
+}
+
+export async function getHistoryFiles(clerkId: string) {
+  const res = await prisma.audio.findMany({
+    where: {
+      clerkId
+    }
+  })
+
+  return res
+}
+
 export async function createStripeSession() {
-  const { userId: clerkId } = await auth()
+  const { userId: clerkId } = await auth();
   const user = await currentUser();
 
   const billingUrl = absoluteUrl("/app/billing");
@@ -20,23 +46,23 @@ export async function createStripeSession() {
 
   if (!clerkId || !user) {
     return {
-      error: 'Not authorized',
+      error: "Not authorized",
       data: null,
-    }
+    };
   }
 
   const userSubscription = await prisma.user.findUnique({
     where: {
-      clerkId
-    }
-  })
+      clerkId,
+    },
+  });
 
   if (userSubscription && userSubscription.stripeCustomerId) {
     const stripeSession = await stripe.billingPortal.sessions.create({
       customer: userSubscription.stripeCustomerId,
       return_url: billingUrl,
-    })
-    return { url: stripeSession.url }
+    });
+    return { url: stripeSession.url };
   }
 
   const stripeSession = await stripe.checkout.sessions.create({
@@ -55,7 +81,7 @@ export async function createStripeSession() {
     metadata: {
       userId: clerkId,
     },
-  })
+  });
 
   return { url: stripeSession.url };
 }

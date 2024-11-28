@@ -1,10 +1,13 @@
 import { elevenlabs } from "@/lib/elevenlabs";
 
 import TextToSpeech from "@/components/text-to-speech";
+import { getHistoryFiles } from "../../actions";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function Home() {
+  const { userId } = await auth()
   const voicesRes = await elevenlabs.voices.getAll();
-  const history = await elevenlabs.history.getAll();
+  const history = (await getHistoryFiles(userId!)).filter(history => history.text && history.text.length > 0)
 
   const voices = voicesRes.voices;
 
