@@ -44,6 +44,7 @@ export default function TextToSpeech({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setAudioUrl(null)
     setIsLoading(true);
 
     try {
@@ -77,6 +78,11 @@ export default function TextToSpeech({
       a.click();
     }
   };
+
+  async function handleDownloadFromHistory(id: string) {
+    const linkAudio = await handleDownloadAudioFiles(id)
+    window.open(linkAudio, '_blank');
+  }
 
   return (
     <div className="max-w-7xl mx-auto w-full">
@@ -130,9 +136,10 @@ export default function TextToSpeech({
                       {audio.text}
                     </span>
                     <Button
+                      type="button"
                       variant="ghost"
                       className="rounded-full"
-                      onClick={() => handleDownloadAudioFiles(audio.audioId)}
+                      onClick={() => handleDownloadFromHistory(audio.audioId)}
                       size="icon"
                     >
                       <DownloadIcon className="size-5" />

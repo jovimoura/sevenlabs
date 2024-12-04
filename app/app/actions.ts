@@ -24,6 +24,8 @@ export async function handleDownloadAudioFiles(fileId: string) {
     fileId
   );
 
+  console.log('result', result)
+
   return result;
 }
 
