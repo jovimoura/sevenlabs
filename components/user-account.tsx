@@ -29,6 +29,7 @@ import { createStripeSession } from "@/app/app/actions";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useClerk } from "@clerk/nextjs";
 
 export function UserAccount({
   user,
@@ -41,6 +42,7 @@ export function UserAccount({
     avatar: string;
   };
 }) {
+  const { signOut } = useClerk();
   const { toast } = useToast();
   const { isMobile } = useSidebar();
 
@@ -144,7 +146,7 @@ export function UserAccount({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut({ redirectUrl: "/" })}>
               <LogOut />
               Log out
             </DropdownMenuItem>
